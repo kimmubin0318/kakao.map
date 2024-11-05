@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- 문자 인코딩을 UTF-8로 설정 -->
+        <meta charset="utf-8" />
+        <!-- 웹 페이지의 제목을 설정 -->
+        <title>Kakao 지도</title>
+    </head>
+    <body>
+        <!-- 카카오 지도를 표시할 요소. 화면 전체를 차지하도록 설정 -->
+        <div id="map" style="width: 100vw; height: 100vh"></div>
+        <!-- 위성 모드 전환 버튼 -->
+        <button
+            id="satellite-toggle"
+            style="
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                background-color: #fff;
+            "
+        >
+            위성지도
+        </button>
+        <!-- 카카오 맵 API를 로드하는 스크립트 -->
+        <script
+            type="text/javascript"
+            src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=0e8f5e0d17b2b2db13d6d4832e631119&autoload=false"
+        ></script>
+        <script>
+            var map;
+            var isSatellite = false; // 위성 모드 상태
+
+            // 카카오 맵 API 로드 후 지도 초기화
+            kakao.maps.load(function () {
+                // 지도 표시를 위한 HTML 요소 선택
+                var container = document.getElementById('map');
+                var options = {
+                    center: new kakao.maps.LatLng(37.4877, 126.8251), // 지도의 중심 좌표 (위도, 경도)
+                    level: 3, // 지도의 확대 수준
+                };
+                map = new kakao.maps.Map(container, options);
+
+                // 지도 타입 컨트롤 생성 및 지도에 추가
+                var mapTypeControl = new kakao.maps.MapTypeControl();
+                map.addControl(
+                    mapTypeControl,
+                    kakao.maps.ControlPosition.TOPRIGHT
+                );
+
+                // 위성지도 전환 버튼 이벤트 리스너 추가
+                document
+                    .getElementById('satellite-toggle')
+                    .addEventListener('click', function () {
+                        toggleSatelliteMode();
+                    });
+            });
+
+            // 위성 모드 토글 함수
+            function toggleSatelliteMode() {
+                isSatellite = !isSatellite;
+                map.setMapTypeId(
+                    isSatellite
+                        ? kakao.maps.MapTypeId.SKYVIEW
+                        : kakao.maps.MapTypeId.ROADMAP
+                );
+                document.getElementById('satellite-toggle').textContent =
+                    isSatellite ? '기본지도' : '위성지도';
+            }
+        </script>
+    </body>
+</html>
+`
